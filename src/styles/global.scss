@@ -1,0 +1,79 @@
+@import 'vars';
+
+.no-break {
+  white-space: nowrap;
+}
+
+@keyframes fade-in {
+  from  { opacity: 0; }
+  to    { opacity: 1; }
+}
+.fade-in {
+  animation: fade-in 0.5s;
+}
+
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.page-header {
+  text-align: center;
+}
+
+.page-content {
+
+}
+
+.page-loading {
+  position: absolute;
+  text-align: center;
+  top: calc(50% + 50px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  @media screen and (max-width: 346px) {
+    top: calc(50% + 70px);
+  }
+}
+
+i.fa {
+  &.red { color: $red; }
+  &.orange { color: $orange; }
+  &.yellow { color: $yellow; }
+  &.olive { color: $olive; }
+  &.green { color: $green; }
+  &.teal { color: $teal; }
+  &.blue { color: $blue; }
+  &.violet { color: $violet; }
+  &.purple { color: $purple; }
+  &.pink { color: $pink; }
+  &.brown { color: $brown; }
+  &.grey { color: $grey; }
+  &.black { color: $black; }
+}
+
+th .driver-name {
+  @media only screen and (max-width: $screen-xs-1) {
+    font-size: .6em;
+  }
+}
+
+.driver-name {
+  @media only screen and (max-width: $screen-xs-1) {
+    font-size: .8em;
+  }
+}
+
+.picks-icon-col {
+  @media only screen and (max-width: $screen-xs-1) {
+    max-width: 60px;
+  }
+
+  i {
+    margin-right: 5px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
