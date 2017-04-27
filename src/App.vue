@@ -28,9 +28,13 @@ try {
   })
 } catch (e) { console.error(e) }
 
+firebase.auth().signInAnonymously().catch(function (e) {
+  console.error(e)
+})
+
+// get data from firebase
 let latestRaceId = {}
 let race = {}
-
 firebase.database().ref('/latestRaceId').once('value')
 .then(function (response) {
   latestRaceId = response.val()
