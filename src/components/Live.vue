@@ -177,9 +177,14 @@ export default {
       let tossupAnswers = tossups.map(tossup => {
         switch (tossup.prompt) {
 
-          case 'Who will win the race?':
+          // high tossups  (very limited choices)
+          case 'Will Dale Earnhardt Jr. finish in the Top 10?':
             try {
-              return String(this.drivers.filter(driver => driver.position === 1)[0].number)
+              if (this.drivers.filter(driver => driver.number === '88')[0].position <= 10) {
+                return 'Yes'
+              } else {
+                return 'No'
+              }
             } catch (e) {
               return ''
             }
@@ -187,6 +192,14 @@ export default {
           case 'Winning car manufacturer?':
             try {
               return String(this.drivers.filter(driver => driver.position === 1)[0].manufacturer)
+            } catch (e) {
+              return ''
+            }
+
+          // max tossups  (moderately limited choices)
+          case 'How many Fords will finish in the Top 20?':
+            try {
+              return String(this.drivers.filter(driver => driver.manufacturer === 'F' && driver.position <= 20).length)
             } catch (e) {
               return ''
             }
@@ -200,6 +213,22 @@ export default {
               }
             } else {
               return String(this.race.live.number_of_caution_segments)
+            }
+
+          // extreme tossups  (broadly limited choices)
+          case 'Which A List Driver will finish behind the others?':
+            try {
+              let driversAListNums = ['2', '4', '11', '18', '20', '22', '48', '78', '88']
+              return String(this.drivers.filter(driver => driversAListNums.includes(driver.number)).sort((a, b) => b.position - a.position)[0].number)
+            } catch (e) {
+              return ''
+            }
+
+          case 'Who will win the race?':
+            try {
+              return String(this.drivers.filter(driver => driver.position === 1)[0].number)
+            } catch (e) {
+              return ''
             }
         }
       })
