@@ -5,7 +5,7 @@
     </div>
 
     <div class="page-content">
-    
+
       <div v-if="race.details" class="fade-in">
 
         <div id="day-info" class="row text-center">
@@ -50,14 +50,14 @@
               </h5>
             </div>
           </div>
-          
+
           <div class="row">
             <div class="col-md-12">
               <standings :race="race" :drivers="drivers" :tossupAnswers="tossupAnswers"></standings>
             </div>
             <p>&nbsp;</p>
           </div>
-          
+
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <picks :race="race" :drivers="drivers"></picks>
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-      
+
       <div v-else class="page-loading">
         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
@@ -134,6 +134,8 @@ export default {
             }
           }
           points += driverCount - stageVehicle.running_position + 1
+        } else {
+          points += driverCount - vehicle.running_position + 1
         }
 
         // get stage 2 points
@@ -147,21 +149,13 @@ export default {
             }
           }
           points += (driverCount - stageVehicle.running_position + 1) * 2
+        } else {
+          points += (driverCount - vehicle.running_position + 1) * 2
         }
 
         // get final stage points
-        if (this.race.details.timestamps.finished) {
-          let stageVehicle
-          for (let i0 = 0; i0 < driverCount; i0++) {
-            let v = this.race.live.vehicles[i0]
-            if (vehicle.driver.driver_id === v.driver.driver_id) {
-              stageVehicle = v
-              break
-            }
-          }
-          points += (driverCount - stageVehicle.running_position + 1) * 3
-          if (stageVehicle.running_position === 1) { points += 100 }
-        }
+        points += (driverCount - vehicle.running_position + 1) * 3
+        if (vehicle.running_position === 1) { points += 100 }
 
         driver.points = points
         drivers.push(driver)
@@ -174,13 +168,25 @@ export default {
         Object.assign({}, this.race.details.tossups.max),
         Object.assign({}, this.race.details.tossups.extreme)
       ]
+      let driversAListNums = ['2', '4', '11', '18', '20', '22', '48', '78', '88']
       let tossupAnswers = tossups.map(tossup => {
         switch (tossup.prompt) {
 
           // high tossups  (very limited choices)
-          case 'Will Dale Earnhardt Jr. finish in the Top 10?':
+          case 'Will Dale Earnhardt Jr. (88) finish in the Top 10?':
             try {
               if (this.drivers.filter(driver => driver.number === '88')[0].position <= 10) {
+                return 'Yes'
+              } else {
+                return 'No'
+              }
+            } catch (e) {
+              return ''
+            }
+
+          case 'Will Jimmie Johnson (48) finish in the Top 10?':
+            try {
+              if (this.drivers.filter(driver => driver.number === '48')[0].position <= 10) {
                 return 'Yes'
               } else {
                 return 'No'
@@ -204,6 +210,27 @@ export default {
               return ''
             }
 
+          case 'How many Chevrolets will finish in the Top 20?':
+            try {
+              return String(this.drivers.filter(driver => driver.manufacturer === 'C' && driver.position <= 20).length)
+            } catch (e) {
+              return ''
+            }
+
+          case 'How many Toyotas will finish in the Top 20?':
+            try {
+              return String(this.drivers.filter(driver => driver.manufacturer === 'T' && driver.position <= 20).length)
+            } catch (e) {
+              return ''
+            }
+
+          case 'How many A List Drivers will finish in the Top 10?':
+            try {
+              return String(this.drivers.filter(driver => driversAListNums.includes(driver.number) && driver.position <= 10).length)
+            } catch (e) {
+              return ''
+            }
+
           case 'How many spontaneous caution flags?':
             if (this.race.stages[0]) {
               if (this.race.stages[1]) {
@@ -218,7 +245,6 @@ export default {
           // extreme tossups  (broadly limited choices)
           case 'Which A List Driver will finish behind the others?':
             try {
-              let driversAListNums = ['2', '4', '11', '18', '20', '22', '48', '78', '88']
               return String(this.drivers.filter(driver => driversAListNums.includes(driver.number)).sort((a, b) => b.position - a.position)[0].number)
             } catch (e) {
               return ''
@@ -255,9 +281,9 @@ export default {
   #day-info {
     padding-top: 0px;
     padding-bottom: 0px;
-    
+
     h4 {
-     line-height: 1.5; 
+     line-height: 1.5;
     }
 
     .race-track {
@@ -270,9 +296,9 @@ export default {
   #race-info {
     padding-top: 0px;
     padding-bottom: 20px;
-    
+
     h4 {
-     line-height: 1.5; 
+     line-height: 1.5;
     }
   }
 </style>
