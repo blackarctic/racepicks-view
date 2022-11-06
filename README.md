@@ -2,7 +2,7 @@
 
 > Front End for RacePicks
 
-Live at <racepicks.online>
+Live at <https://racepicks.online>
 
 ## Build Setup
 
